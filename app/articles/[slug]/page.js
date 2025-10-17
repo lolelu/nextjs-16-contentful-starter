@@ -1,8 +1,8 @@
-import { getAllArticles, getArticle } from "@/lib/api";
-import { cacheLife } from "next/cache";
+import { getAllArticles, getArticle } from "../../../lib/api";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { draftMode } from "next/headers";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -14,9 +14,6 @@ export async function generateStaticParams() {
 }
 
 export default async function KnowledgeArticlePage(props) {
-  "use cache";
-  cacheLife("max")
-
   const params = await props.params;
   const { isEnabled } = await draftMode();
   const article = await getArticle(params.slug, isEnabled);
@@ -25,36 +22,112 @@ export default async function KnowledgeArticlePage(props) {
     notFound();
   }
 
+  const formattedDate = article.date ? new Date(article.date).toDateString() : null;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white">
-      <section className="w-full">
-        <div className="container space-y-12 px-4 md:px-6">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">
-              {article.title}
-            </h1>
-            <p className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
-              {article.summary}
+    <main className="max-w-4xl mx-auto px-6 py-16">
+      <article>
+        <div className="flex items-center gap-4 mb-8">
+          <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wide uppercase bg-black text-white">
+            {article.categoryName}
+          </span>
+          {formattedDate && (
+            <time className="text-sm text-black/50">{formattedDate}</time>
+          )}
+        </div>
+
+        <h1 className="text-5xl font-semibold text-black mb-6 text-balance leading-tight">
+          {article.title}
+        </h1>
+
+        <p className="text-lg text-black/60 mb-12">By {article.authorName}</p>
+
+        <div className="relative w-full aspect-[2/1] mb-12 overflow-hidden bg-black/5 border border-black/5 shadow-sm">
+          <Image
+            src={article.articleImage?.url || "/placeholder.svg"}
+            alt={article.title}
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        <div className="mb-12 pb-12 border-b border-black/10">
+          <p className="text-xl text-black/80 leading-relaxed text-pretty font-medium">
+            {article.summary}
+          </p>
+        </div>
+
+        <div
+          className="prose prose-lg max-w-none"
+          style={{
+            color: "rgb(0 0 0 / 0.8)",
+          }}
+        >
+          {documentToReactComponents(article.details.json)}
+        </div>
+      </article>
+
+      <SuggestedArticle currentSlug={article.slug} />
+
+      <div className="mt-16 pt-12 border-t border-black/10">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-black/60 hover:text-black transition-colors group"
+        >
+          <span className="group-hover:-translate-x-1 transition-transform">
+            ←
+          </span>
+          <span>Back to all articles</span>
+        </Link>
+      </div>
+    </main>
+  );
+}
+
+async function SuggestedArticle({ currentSlug }) {
+  const allArticles = await getAllArticles();
+  const otherArticles = allArticles.filter(a => a.slug !== currentSlug);
+  const suggestedArticle = otherArticles.length > 0
+    ? otherArticles[Math.floor(Math.random() * otherArticles.length)]
+    : null;
+
+  if (!suggestedArticle) {
+    return null;
+  }
+
+  return (
+    <section className="mt-24 pt-16 border-t border-black/10">
+      <h2 className="text-3xl font-semibold text-black mb-12">For you</h2>
+      <Link
+        href={`/articles/${suggestedArticle.slug}`}
+        className="group block border border-black/5 overflow-hidden bg-white hover:shadow-lg transition-all duration-300"
+      >
+        <div className="flex flex-col gap-6 p-8">
+          <div className="relative w-full aspect-[2/1] overflow-hidden bg-black/5">
+            <Image
+              src={suggestedArticle.articleImage?.url || "/placeholder.svg"}
+              alt={suggestedArticle.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          <div>
+            <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wide uppercase bg-black text-white mb-4">
+              {suggestedArticle.categoryName}
+            </span>
+            <h3 className="text-2xl font-semibold text-black mb-3 group-hover:text-black/70 transition-colors">
+              {suggestedArticle.title}
+            </h3>
+            <p className="text-base text-black/60 mb-4 leading-relaxed">
+              {suggestedArticle.summary}
+            </p>
+            <p className="text-sm text-black/50">
+              By {suggestedArticle.authorName}
             </p>
           </div>
-          <div className="space-y-8 lg:space-y-10">
-            <Image
-              alt="Article Image"
-              className="aspect-video w-full overflow-hidden rounded-xl object-cover"
-              height="365"
-              src={article.articleImage.url}
-              width="650"
-            />
-            <div className="space-y-4 md:space-y-6">
-              <div className="space-y-2">
-                <div className="max-w-[900px] text-zinc-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-zinc-400">
-                  {documentToReactComponents(article.details.json)}
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </section>
-    </main>
+      </Link>
+    </section>
   );
 }
