@@ -24,6 +24,9 @@ importers:
         specifier: ^19.2.1
         version: 19.2.3(react@19.2.3)
     devDependencies:
+      '@contentful/rich-text-types':
+        specifier: ^17.2.5
+        version: 17.2.5
       '@tailwindcss/postcss':
         specifier: ^4.1.17
         version: 4.1.18
