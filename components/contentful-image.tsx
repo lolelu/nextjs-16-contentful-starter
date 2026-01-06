@@ -14,13 +14,13 @@ type ContentfulImageProps = Omit<ImageProps, "src"> & {
   src?: string;
 };
 
-export function ContentfulImage({ ...props }: ContentfulImageProps) {
+export function ContentfulImage({ src, ...props }: ContentfulImageProps) {
   return (
     <Image
       loader={contentfulLoader}
       {...props}
       alt={props.alt}
-      src={props?.src || "./placeholder.svg"}
+      src={src || "/placeholder.svg"}
     />
   );
 }

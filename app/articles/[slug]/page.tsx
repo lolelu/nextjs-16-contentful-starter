@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getArticles } from "@/lib/contentful/queries";
-import { Markdown } from "@/lib/markdown";
+import { RichText } from "@/lib/contentful/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 
@@ -88,7 +88,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
           color: "rgb(0 0 0 / 0.8)",
         }}
       >
-        <Markdown content={details} />
+        <RichText content={details} />
       </div>
     </article>
   );

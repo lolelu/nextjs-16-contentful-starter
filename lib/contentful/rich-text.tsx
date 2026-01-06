@@ -2,7 +2,7 @@ import { ContentfulImage } from "@/components/contentful-image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, Document } from "@contentful/rich-text-types";
 
-export function Markdown({ content }: { content: Document }) {
+export function RichText({ content }: { content: Document }) {
   return documentToReactComponents(content, {
     renderNode: {
       [BLOCKS.PARAGRAPH]: (_node, children) => (
