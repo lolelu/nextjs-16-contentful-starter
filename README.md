@@ -22,7 +22,6 @@ CONTENTFUL_SPACE_ID=<Replace with your Contentful Space ID>
 CONTENTFUL_ACCESS_TOKEN=<Replace with your Contentful access token>
 CONTENTFUL_PREVIEW_ACCESS_TOKEN=<Replace with your Contentful preview access token>
 CONTENTFUL_REVALIDATE_SECRET=<Replace with a secret string to be set in Contentful's webhook settings>
-CONTENTFUL_PREVIEW_SECRET=<Replace with a secret string to be set in Contentful's Content Preview settings>
 ```
 
 ## Getting Started
