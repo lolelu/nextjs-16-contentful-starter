@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="[scrollbar-gutter:stable]">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen">
           <Header title="Knowledge Articles" />
           {children}
         </div>

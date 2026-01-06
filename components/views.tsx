@@ -9,14 +9,14 @@ export function ViewsSkeleton() {
 }
 
 async function getViews(): Promise<number> {
-  // Simulated delay (in production, fetch views by slug from DB)
+  // Simulated delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const EPOCH = 1704067200000;
   return Date.now() - EPOCH + Math.random();
 }
 
 export async function Views({ params }: ViewsProps) {
-  await params; // Await params to access slug when needed
+  await params;
   const views = await getViews();
 
   return (

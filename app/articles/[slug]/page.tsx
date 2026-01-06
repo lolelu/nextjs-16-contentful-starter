@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getArticles } from "@/lib/contentful/queries";
-import { RichText } from "@/lib/contentful/rich-text";
+import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 
