@@ -6,6 +6,6 @@ export const extractArticleFields = (
 ) => {
   return entries.items.map((entry) => ({
     ...entry.fields,
-    updatedAt: entry.sys.updatedAt,
+    id: entry.sys.id,
   }));
 };

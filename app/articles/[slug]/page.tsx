@@ -5,6 +5,7 @@ import { getArticles } from "@/lib/contentful/queries";
 import { Markdown } from "@/lib/markdown";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
+import { cacheTag } from "next/cache";
 
 export default async function KnowledgeArticlePage(props: {
   params: Promise<{ slug: string }>;
@@ -33,11 +34,13 @@ export default async function KnowledgeArticlePage(props: {
 }
 
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
+  "use cache";
   const params = await props.params;
-  const article = await getArticles(undefined, {
+  const article = await getArticles({
     "fields.slug": params.slug,
     limit: 1,
   });
+  cacheTag(article[0].id);
 
   if (!article || article.length === 0) {
     notFound();

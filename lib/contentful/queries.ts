@@ -1,17 +1,17 @@
-import { cacheTag } from "next/cache";
 import { getContentfulClient } from "./client";
 import { ArticleQuery, ArticleSkeleton, CONTENT_TYPE_IDS } from "./types";
 import { extractArticleFields } from "./utils";
+import { cacheTag } from "next/cache";
 
-export const getArticles = async (isDraft?: boolean, query?: ArticleQuery) => {
+export const getArticles = async (query?: ArticleQuery) => {
   "use cache";
-  const client = getContentfulClient(isDraft);
+  const client = getContentfulClient();
   const entriesResult =
     await client.withoutUnresolvableLinks.getEntries<ArticleSkeleton>({
       content_type: CONTENT_TYPE_IDS.KNOWLEDGE_ARTICLE,
       ...query,
     });
-  cacheTag(...entriesResult.items.map((item) => item.sys.id));
   const entries = extractArticleFields(entriesResult);
+  cacheTag(...entries.map((entry) => entry.id));
   return entries;
 };

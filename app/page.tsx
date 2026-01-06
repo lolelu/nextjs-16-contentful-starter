@@ -1,22 +1,20 @@
 import { getArticles } from "@/lib/contentful/queries";
 import { ContentfulImage } from "@/components/contentful-image";
 import Link from "next/link";
-import { Suspense } from "react";
+import { cacheTag } from "next/cache";
 
 export default function Home() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      {/* Add a dynamic hole where async content will be rendered */}
-      <Suspense fallback={<ArticlesSkeleton />}>
-        <Articles />
-      </Suspense>
+      <Articles />
     </main>
   );
 }
 
 async function Articles() {
-  // Await dynamic content, showing the fallback while getting articles
+  "use cache";
   const articles = await getArticles();
+  cacheTag(...articles.map((article) => article.id));
 
   return (
     <>
