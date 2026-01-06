@@ -1,7 +1,3 @@
-export const cn = (...classes: string[]): string => {
-  return classes.filter(Boolean).join(" ");
-};
-
 export const getFormattedDate = (dateString: string): string | null => {
   const date = new Date(dateString);
 
@@ -33,4 +29,12 @@ export function getRelativeTime(dateString: string): string {
   if (months < 12) return `${months} month${months !== 1 ? "s" : ""} ago`;
   const years = Math.floor(months / 12);
   return `${years} year${years !== 1 ? "s" : ""} ago`;
+}
+
+// Epoch: Jan 1, 2024 - for small, 1000s-range numbers
+const EPOCH = 1704067200000; // Jan 1, 2024 in ms
+
+// Returns a random number that is always higher than any previous call,
+export function getIncreasingRandom(): number {
+  return Date.now() - EPOCH + Math.random();
 }

@@ -1,35 +1,33 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { getArticles } from "@/lib/contentful/queries";
 import { Markdown } from "@/lib/markdown";
 import { ContentfulImage } from "@/components/contentful-image";
-import { LastUpdated, LastUpdatedSkeleton } from "@/components/updated-at";
-import { Suspense } from "react";
+import { Views, ViewsSkeleton } from "@/components/views";
 
 export default async function KnowledgeArticlePage(props: {
   params: Promise<{ slug: string }>;
 }) {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      <div className="mb-8">
-        <Suspense fallback={<LastUpdatedSkeleton />}>
-          <LastUpdated params={props.params} />
+      <nav className="flex items-center justify-between mb-12 text-sm">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-black/50 hover:text-black transition-colors group"
+        >
+          <span className="group-hover:-translate-x-0.5 transition-transform">
+            ←
+          </span>
+          <span>All articles</span>
+        </Link>
+        <Suspense fallback={<ViewsSkeleton />}>
+          <Views params={props.params} />
         </Suspense>
-      </div>
+      </nav>
       <Suspense fallback={<ArticleContentSkeleton />}>
         <ArticleContent params={props.params} />
       </Suspense>
-      <div className="mt-16 pt-12 border-t border-black/10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-black/60 hover:text-black transition-colors group"
-        >
-          <span className="group-hover:-translate-x-1 transition-transform">
-            ←
-          </span>
-          <span>Back to all articles</span>
-        </Link>
-      </div>
     </main>
   );
 }
@@ -60,7 +58,9 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
         {title}
       </h1>
 
-      <p className="text-lg text-black/60 mb-12">By {authorName}</p>
+      <div className="flex items-center gap-3 text-lg text-black/60 mb-12">
+        <span>By {authorName}</span>
+      </div>
 
       <div className="relative w-full aspect-2/1 mb-12 overflow-hidden bg-black/5 border border-black/5 shadow-sm">
         <ContentfulImage
@@ -102,9 +102,11 @@ function ArticleContentSkeleton() {
         Article Title
       </h1>
 
-      <p className="text-lg mb-12 bg-black/10 text-transparent animate-pulse rounded w-fit">
-        By Author Name
-      </p>
+      <div className="flex items-center gap-3 text-lg mb-12">
+        <span className="bg-black/10 text-transparent animate-pulse rounded">
+          By Author Name
+        </span>
+      </div>
 
       <div className="relative w-full aspect-2/1 mb-12 overflow-hidden bg-black/5 border border-black/5 shadow-sm animate-pulse" />
 
