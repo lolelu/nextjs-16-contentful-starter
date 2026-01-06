@@ -5,14 +5,6 @@ import { Markdown } from "@/lib/markdown";
 import { ContentfulImage } from "@/components/contentful-image";
 import { UpdatedAt } from "@/components/updated-at";
 
-export async function generateStaticParams() {
-  const allArticles = await getArticles();
-
-  return allArticles.map((article) => ({
-    slug: article.slug,
-  }));
-}
-
 export default async function KnowledgeArticlePage(props: {
   params: Promise<{ slug: string }>;
 }) {
