@@ -1,5 +1,4 @@
 import { getArticles } from "@/lib/contentful/queries";
-import { Suspense } from "react";
 
 function getRelativeTime(dateString: string): string {
   const date = new Date(dateString);
@@ -24,13 +23,7 @@ export async function UpdatedAt(props: { params: Promise<{ slug: string }> }) {
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-black/60 bg-black/5 rounded-full">
       <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
       <p>Last updated: </p>
-      <Suspense
-        fallback={
-          <div className="w-20 h-4 bg-black/5 rounded-full animate-pulse"></div>
-        }
-      >
-        <p>{relativeTime(props)}</p>
-      </Suspense>
+      <p>{relativeTime(props)}</p>
     </span>
   );
 }

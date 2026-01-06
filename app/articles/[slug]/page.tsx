@@ -38,8 +38,6 @@ export default async function KnowledgeArticlePage(props: {
 }
 
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
-  "use cache";
-
   const params = await props.params;
   const article = await getArticles(undefined, {
     "fields.slug": params.slug,
