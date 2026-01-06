@@ -1,11 +1,14 @@
 import { getArticles } from "@/lib/contentful/queries";
 import { ContentfulImage } from "@/components/contentful-image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      <Articles />
+      <Suspense fallback={<ArticlesSkeleton />}>
+        <Articles />
+      </Suspense>
     </main>
   );
 }
@@ -47,6 +50,30 @@ async function Articles() {
             </div>
           </article>
         </Link>
+      ))}
+    </>
+  );
+}
+
+function ArticlesSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 3 }).map((_, index) => (
+        <article
+          key={index}
+          className="group mb-8 bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-xl hover:border-black/10 transition-all duration-300"
+        >
+          <div className="relative w-full aspect-[2/1] overflow-hidden bg-black/5">
+            <div className="w-full h-full bg-black/5 animate-pulse"></div>
+          </div>
+          <div className="p-10 animate-pulse w-full">
+            <div className="mb-4 w-1/4 h-6 bg-black/5 animate-pulse px-3 py-1"></div>
+            <div className="mb-4 w-1/4 h-8 bg-black/5 animate-pulse px-3 py-1"></div>
+            <div className="mb-1 w-full h-6 bg-black/5 animate-pulse"></div>
+            <div className="mb-1 w-full h-6 bg-black/5 animate-pulse"></div>
+            <div className="mb-1 w-full h-6 bg-black/5 animate-pulse"></div>
+          </div>
+        </article>
       ))}
     </>
   );

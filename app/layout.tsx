@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="[scrollbar-gutter:stable]">
       <body className={inter.className} suppressHydrationWarning={true}>
         <div className="min-h-screen bg-white">
           <Header title="Knowledge Articles" />
