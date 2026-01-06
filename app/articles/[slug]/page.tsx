@@ -7,7 +7,7 @@ import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 
 export async function generateStaticParams() {
-  const articles = await getArticles({ limit: 5, order: ["-sys.createdAt"] });
+  const articles = await getArticles({ limit: 5 });
   return articles.map((article) => ({ slug: article.slug }));
 }
 
