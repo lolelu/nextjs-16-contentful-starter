@@ -15,15 +15,12 @@ type ContentfulImageProps = Omit<ImageProps, "src"> & {
 };
 
 export function ContentfulImage({ ...props }: ContentfulImageProps) {
-  if (!props.src) {
-    return null;
-  }
   return (
     <Image
       loader={contentfulLoader}
       {...props}
       alt={props.alt}
-      src={props.src}
+      src={props?.src || "./placeholder.svg"}
     />
   );
 }
