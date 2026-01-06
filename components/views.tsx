@@ -1,5 +1,3 @@
-import { getIncreasingRandom } from "@/lib/utils";
-
 type ViewsProps = {
   params: Promise<{ slug: string }> | { slug: string };
 };
@@ -13,7 +11,8 @@ export function ViewsSkeleton() {
 async function getViews(): Promise<number> {
   // Simulated delay (in production, fetch views by slug from DB)
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return getIncreasingRandom();
+  const EPOCH = 1704067200000;
+  return Date.now() - EPOCH + Math.random();
 }
 
 export async function Views({ params }: ViewsProps) {
