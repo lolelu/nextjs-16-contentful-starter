@@ -4,5 +4,8 @@ import { ArticleSkeleton } from "./types";
 export const extractArticleFields = (
   entries: EntryCollection<ArticleSkeleton, "WITHOUT_UNRESOLVABLE_LINKS">
 ) => {
-  return entries.items.map((entry) => entry.fields);
+  return entries.items.map((entry) => ({
+    ...entry.fields,
+    updatedAt: entry.sys.updatedAt,
+  }));
 };

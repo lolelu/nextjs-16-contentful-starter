@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getArticles } from "@/lib/contentful/queries";
-import { getFormattedDate } from "@/lib/utils";
 import { Markdown } from "@/lib/markdown";
 import { ContentfulImage } from "@/components/contentful-image";
-import { draftMode } from "next/headers";
-import { Suspense } from "react";
+import { UpdatedAt } from "@/components/updated-at";
+
 export async function generateStaticParams() {
   const allArticles = await getArticles();
 
@@ -19,13 +18,10 @@ export default async function KnowledgeArticlePage(props: {
 }) {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      <Suspense fallback={<ArticleContentSkeleton />}>
-        <ArticleContent params={props.params} />
-      </Suspense>
-
-      <Suspense fallback={<SuggestedArticleSkeleton />}>
-        <SuggestedArticle params={props.params} />
-      </Suspense>
+      <div className="mb-8">
+        <UpdatedAt params={props.params} />
+      </div>
+      <ArticleContent params={props.params} />
       <div className="mt-16 pt-12 border-t border-black/10">
         <Link
           href="/"
@@ -42,9 +38,10 @@ export default async function KnowledgeArticlePage(props: {
 }
 
 async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
+  "use cache";
+
   const params = await props.params;
-  const isDraft = (await draftMode()).isEnabled;
-  const article = await getArticles(isDraft, {
+  const article = await getArticles(undefined, {
     "fields.slug": params.slug,
     limit: 1,
   });
@@ -53,26 +50,15 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
     notFound();
   }
 
-  const {
-    title,
-    categoryName,
-    authorName,
-    date,
-    summary,
-    details,
-    articleImage,
-  } = article[0];
+  const { title, categoryName, authorName, summary, details, articleImage } =
+    article[0];
 
-  const formattedDate = getFormattedDate(date);
   return (
     <article>
       <div className="flex items-center gap-4 mb-8">
         <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wide uppercase bg-black text-white">
           {categoryName}
         </span>
-        {formattedDate && (
-          <time className="text-sm text-black/50">{formattedDate}</time>
-        )}
       </div>
 
       <h1 className="text-5xl font-semibold text-black mb-6 text-balance leading-tight">
@@ -105,123 +91,5 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
         <Markdown content={details} />
       </div>
     </article>
-  );
-}
-
-async function SuggestedArticle(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
-  const currentSlug = params.slug;
-  const allArticles = await getArticles();
-  const currentArticleIndex = allArticles.findIndex(
-    (a) => a.slug === currentSlug
-  );
-
-  if (currentArticleIndex === -1 || allArticles.length < 2) {
-    return null;
-  }
-
-  const suggestedArticle =
-    allArticles[(currentArticleIndex + 1) % allArticles.length];
-
-  if (!suggestedArticle) {
-    return null;
-  }
-  const { title, categoryName, authorName, summary, articleImage, slug } =
-    suggestedArticle;
-
-  return (
-    <section className="mt-24 pt-16 border-t border-black/10">
-      <h2 className="text-3xl font-semibold text-black mb-12">For you</h2>
-      <Link
-        href={`/articles/${slug}`}
-        className="group block border border-black/5 overflow-hidden bg-white hover:shadow-lg transition-all duration-300"
-      >
-        <div className="flex flex-col gap-6 p-8">
-          <div className="relative w-full aspect-[2/1] overflow-hidden bg-black/5">
-            <ContentfulImage
-              src={articleImage?.fields?.file?.url}
-              alt={title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-
-          <div>
-            <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wide uppercase bg-black text-white mb-4">
-              {categoryName}
-            </span>
-            <h3 className="text-2xl font-semibold text-black mb-3 group-hover:text-black/70 transition-colors">
-              {title}
-            </h3>
-            <p className="text-base text-black/60 mb-4 leading-relaxed">
-              {summary}
-            </p>
-            <p className="text-sm text-black/50">By {authorName}</p>
-          </div>
-        </div>
-      </Link>
-    </section>
-  );
-}
-
-export function ArticleContentSkeleton() {
-  return (
-    <article>
-      <div className="flex items-center gap-4 mb-8">
-        <div className="h-6 w-24 bg-gradient-to-r from-black/5 to-black/10 animate-pulse" />
-        <div className="h-4 w-28 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-      </div>
-
-      <div className="space-y-3 mb-6">
-        <div className="h-12 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-12 w-3/4 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-      </div>
-
-      <div className="h-5 w-32 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded mb-12" />
-
-      <div className="relative w-full aspect-[2/1] mb-12 bg-gradient-to-r from-black/5 to-black/10 animate-pulse border border-black/5 shadow-sm" />
-
-      <div className="mb-12 pb-12 border-b border-black/10 space-y-3">
-        <div className="h-6 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-6 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-6 w-4/5 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-      </div>
-
-      <div className="space-y-4">
-        <div className="h-4 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-4 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-4 w-5/6 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-4 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-        <div className="h-4 w-4/5 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-      </div>
-    </article>
-  );
-}
-
-export function SuggestedArticleSkeleton() {
-  return (
-    <section className="mt-24 pt-16 border-t border-black/10">
-      <div className="h-9 w-32 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded mb-12" />
-
-      <div className="block border border-black/5 overflow-hidden bg-white">
-        <div className="flex flex-col gap-6 p-8">
-          <div className="relative w-full aspect-[2/1] bg-gradient-to-r from-black/5 to-black/10 animate-pulse" />
-
-          <div className="space-y-4">
-            <div className="h-6 w-24 bg-gradient-to-r from-black/5 to-black/10 animate-pulse" />
-            <div className="space-y-2">
-              <div className="h-7 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-              <div className="h-7 w-3/4 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-            </div>
-            <div className="space-y-2 pt-2">
-              <div className="h-5 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-              <div className="h-5 w-full bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-              <div className="h-5 w-2/3 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-            </div>
-            <div className="h-4 w-28 bg-gradient-to-r from-black/5 to-black/10 animate-pulse rounded" />
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
