@@ -1,7 +1,7 @@
 import { EntriesQueries, EntryFieldTypes, EntrySkeletonType } from "contentful";
 
 export enum CONTENT_TYPE_IDS {
-  KNOWLEDGE_ARTICLE = "knowledgeArticle",
+  ARTICLE = "article",
 }
 
 export type ArticleQuery = EntriesQueries<
@@ -10,7 +10,7 @@ export type ArticleQuery = EntriesQueries<
 >;
 
 export interface ArticleSkeleton extends EntrySkeletonType {
-  contentTypeId: CONTENT_TYPE_IDS.KNOWLEDGE_ARTICLE;
+  contentTypeId: CONTENT_TYPE_IDS.ARTICLE;
   fields: {
     title: EntryFieldTypes.Text;
     slug: EntryFieldTypes.Text;

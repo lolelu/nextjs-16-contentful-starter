@@ -8,7 +8,7 @@ export const getArticles = async (query?: ArticleQuery) => {
   const client = getContentfulClient();
   const entriesResult =
     await client.withoutUnresolvableLinks.getEntries<ArticleSkeleton>({
-      content_type: CONTENT_TYPE_IDS.KNOWLEDGE_ARTICLE,
+      content_type: CONTENT_TYPE_IDS.ARTICLE,
       ...query,
     });
   const entries = extractArticleFields(entriesResult);
