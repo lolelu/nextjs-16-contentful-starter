@@ -6,6 +6,11 @@ import { Markdown } from "@/lib/markdown";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
 
+export async function generateStaticParams() {
+  const articles = await getArticles({ limit: 5, order: ["-sys.createdAt"] });
+  return articles.map((article) => ({ slug: article.slug }));
+}
+
 export default async function KnowledgeArticlePage(props: {
   params: Promise<{ slug: string }>;
 }) {
