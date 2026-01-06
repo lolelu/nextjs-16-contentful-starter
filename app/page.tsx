@@ -6,6 +6,7 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
+      {/* Add a dynamic hole where async content will be rendered */}
       <Suspense fallback={<ArticlesSkeleton />}>
         <Articles />
       </Suspense>
@@ -14,6 +15,7 @@ export default function Home() {
 }
 
 async function Articles() {
+  // Await dynamic content, showing the fallback while getting articles
   const articles = await getArticles();
 
   return (
@@ -21,7 +23,7 @@ async function Articles() {
       {articles.map((article) => (
         <Link key={article.slug} href={`/articles/${article.slug}`}>
           <article className="group mb-8 bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-xl hover:border-black/10 transition-all duration-300">
-            <div className="relative w-full aspect-[2/1] overflow-hidden bg-black/5">
+            <div className="relative w-full aspect-2/1 overflow-hidden bg-black/5">
               <ContentfulImage
                 src={article.articleImage?.fields?.file?.url}
                 alt={article.title}
@@ -55,6 +57,7 @@ async function Articles() {
   );
 }
 
+// Create a skeleton component that matches the articles component without introducing layout shift
 function ArticlesSkeleton() {
   return (
     <>
@@ -63,7 +66,7 @@ function ArticlesSkeleton() {
           key={index}
           className="group mb-8 bg-white border border-black/5 overflow-hidden shadow-sm hover:shadow-xl hover:border-black/10 transition-all duration-300"
         >
-          <div className="relative w-full aspect-[2/1] overflow-hidden bg-black/5">
+          <div className="relative w-full aspect-2/1 overflow-hidden bg-black/5">
             <div className="w-full h-full bg-black/5 animate-pulse"></div>
           </div>
           <div className="p-10 animate-pulse w-full">
