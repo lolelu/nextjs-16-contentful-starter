@@ -6,7 +6,7 @@ import { getArticles } from "@/lib/contentful/queries";
 import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
-import { incrementViews } from "@/lib/redis";
+import { TrackView } from "@/components/track-view";
 
 export async function generateStaticParams() {
   const articles = await getArticles({ limit: 5 });
@@ -18,6 +18,7 @@ export default async function ArticlePage(props: {
 }) {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
+      <TrackView params={props.params} />
       <nav className="flex items-center justify-between mb-12 text-sm">
         <Link
           href="/"
