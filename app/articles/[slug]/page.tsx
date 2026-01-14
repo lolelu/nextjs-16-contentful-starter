@@ -12,7 +12,7 @@ export async function generateStaticParams() {
   return articles.map((article) => ({ slug: article.slug }));
 }
 
-export default async function ArticlePage(props: {
+export default function ArticlePage(props: {
   params: Promise<{ slug: string }>;
 }) {
   return (
