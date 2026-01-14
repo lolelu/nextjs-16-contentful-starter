@@ -1,3 +1,5 @@
+import { getViews } from "@/lib/redis";
+
 type ViewsProps = {
   params: Promise<{ slug: string }> | { slug: string };
 };
@@ -8,20 +10,13 @@ export function ViewsSkeleton() {
   );
 }
 
-async function getViews(): Promise<number> {
-  // Simulated delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  const EPOCH = 1704067200000;
-  return Date.now() - EPOCH + Math.random();
-}
-
 export async function Views({ params }: ViewsProps) {
-  await params;
-  const views = await getViews();
+  const resolvedParams = await params;
+  const views = await getViews(resolvedParams.slug);
 
   return (
     <span className="tabular-nums text-black/50">
-      {Math.floor(views).toLocaleString()} views
+      {views.toLocaleString()} views
     </span>
   );
 }

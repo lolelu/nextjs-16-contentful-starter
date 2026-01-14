@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { Suspense } from "react";
 import { getArticles } from "@/lib/contentful/queries";
 import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
 import { Views, ViewsSkeleton } from "@/components/views";
+import { incrementViews } from "@/lib/redis";
 
 export async function generateStaticParams() {
   const articles = await getArticles({ limit: 5 });
@@ -47,6 +49,10 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
   if (!article || article.length === 0) {
     notFound();
   }
+
+  after(() => {
+    incrementViews(params.slug);
+  });
 
   const { title, categoryName, authorName, summary, details, articleImage } =
     article[0];
