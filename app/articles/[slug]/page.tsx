@@ -17,7 +17,6 @@ export default function ArticlePage(props: {
 }) {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16">
-      <TrackView params={props.params} />
       <nav className="flex items-center justify-between mb-12 text-sm">
         <Link
           href="/"
@@ -55,6 +54,7 @@ async function ArticleContent(props: { params: Promise<{ slug: string }> }) {
 
   return (
     <article>
+      <TrackView slug={params.slug} />
       <div className="flex items-center gap-4 mb-8">
         <span className="inline-block px-3 py-1 text-xs font-semibold tracking-wide uppercase bg-black text-white">
           {categoryName}

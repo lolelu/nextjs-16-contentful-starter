@@ -1,16 +1,12 @@
-import { after } from "next/server";
-import { incrementViews } from "@/lib/redis";
+"use client";
 
-export async function TrackView({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+import { useEffect } from "react";
+import { incrementViews } from "@/app/actions";
 
-  after(() => {
+export function TrackView({ slug }: { slug: string }) {
+  useEffect(() => {
     incrementViews(slug);
-  });
+  }, [slug]);
 
   return null;
 }
