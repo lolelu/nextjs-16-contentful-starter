@@ -4,6 +4,12 @@ import { Suspense } from "react";
 import { getArticles } from "@/lib/contentful/queries";
 import { RichText } from "@/components/rich-text";
 import { ContentfulImage } from "@/components/contentful-image";
+import { Views, ViewsSkeleton } from "@/components/views";
+
+export async function generateStaticParams() {
+  const articles = await getArticles({ limit: 5 });
+  return articles.map((article) => ({ slug: article.slug }));
+}
 
 export default async function ArticlePage(props: {
   params: Promise<{ slug: string }>;
@@ -20,6 +26,9 @@ export default async function ArticlePage(props: {
           </span>
           <span>All articles</span>
         </Link>
+        <Suspense fallback={<ViewsSkeleton />}>
+          <Views params={props.params} />
+        </Suspense>
       </nav>
       <Suspense fallback={<ArticleContentSkeleton />}>
         <ArticleContent params={props.params} />
