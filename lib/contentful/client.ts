@@ -30,6 +30,7 @@ export const getContentfulClient = (isDraft?: boolean) => {
   const client = createClient({
     space: process.env.CONTENTFUL_SPACE_ID,
     accessToken,
+    environment: process.env.CONTENTFUL_ENVIRONMENT,
     host: isDraft ? "preview.contentful.com" : "cdn.contentful.com",
   });
 

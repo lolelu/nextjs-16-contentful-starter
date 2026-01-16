@@ -1,11 +1,3 @@
-import { EntryCollection } from "contentful";
-import { ArticleSkeleton } from "./types";
-
-export const extractArticleFields = (
-  entries: EntryCollection<ArticleSkeleton, "WITHOUT_UNRESOLVABLE_LINKS">
-) => {
-  return entries.items.map((entry) => ({
-    ...entry.fields,
-    id: entry.sys.id,
-  }));
-};
+// Utility functions for Contentful data transformation
+// Currently empty as extraction is done inline in queries
+// Add shared utilities here as needed

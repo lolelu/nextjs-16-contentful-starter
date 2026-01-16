@@ -1,0 +1,57 @@
+import type { ChainModifiers, Entry, EntryFieldTypes, EntrySkeletonType, LocaleCode } from "contentful";
+import type { TypeAddressLabelsSkeleton } from "./TypeAddressLabels";
+import type { TypeOrderStatusLabelsSkeleton } from "./TypeOrderStatusLabels";
+
+export interface TypeMyOrderLabelsFields {
+    internalName: EntryFieldTypes.Symbol;
+    isSingleton?: EntryFieldTypes.Symbol<"Yes">;
+    orderLabel: EntryFieldTypes.Symbol;
+    orderNumberLabel: EntryFieldTypes.Symbol;
+    orderStatusLabels: EntryFieldTypes.EntryLink<TypeOrderStatusLabelsSkeleton>;
+    orderStatusLabel: EntryFieldTypes.Symbol;
+    viewMoreLinkLabel: EntryFieldTypes.Symbol;
+    returnMyOrderLinkLabel: EntryFieldTypes.Symbol;
+    orderReturnedLabel: EntryFieldTypes.Symbol;
+    onDateYouRequestedToReturnLabel: EntryFieldTypes.Text;
+    deliveryAddressLabel: EntryFieldTypes.Symbol;
+    billingAddressLabel: EntryFieldTypes.Symbol;
+    deliveryModeLabel: EntryFieldTypes.Symbol;
+    deliveryDateLabel: EntryFieldTypes.Symbol;
+    invoiceLabel: EntryFieldTypes.Symbol;
+    downloadTheInvoiceLinkLabel: EntryFieldTypes.Symbol;
+    paymentMethodLabel: EntryFieldTypes.Symbol;
+    quantityLabel: EntryFieldTypes.Symbol;
+    statusLabel: EntryFieldTypes.Symbol;
+    estimatedDeliveryLabel: EntryFieldTypes.Symbol;
+    productRegisteredOnDateLabel: EntryFieldTypes.Symbol;
+    followShipmentLinkLabel: EntryFieldTypes.Symbol;
+    unknownStatusLabel: EntryFieldTypes.Symbol;
+    preparingForShipmentStatusLabel: EntryFieldTypes.Symbol;
+    cancelledStatusLabel: EntryFieldTypes.Symbol;
+    shippedStatusLabel: EntryFieldTypes.Symbol;
+    partiallyShippedStatusLabel: EntryFieldTypes.Symbol;
+    deliveredStatusLabel: EntryFieldTypes.Symbol;
+    partiallyDeliveredStatusLabel: EntryFieldTypes.Symbol;
+    deliveryFailedStatusLabel: EntryFieldTypes.Symbol;
+    returnedStatusLabel: EntryFieldTypes.Symbol;
+    partiallyReturnedStatusLabel: EntryFieldTypes.Symbol;
+    sentStatusLabel: EntryFieldTypes.Symbol;
+    addressLabels: EntryFieldTypes.EntryLink<TypeAddressLabelsSkeleton>;
+    returnConfirmationTitleLabel: EntryFieldTypes.Symbol;
+    returnConfirmationTextLabel: EntryFieldTypes.Symbol;
+    returnConfirmationConfirmButtonLabel: EntryFieldTypes.Symbol;
+    returnConfirmationCancelButtonLabel: EntryFieldTypes.Symbol;
+    warningMessage?: EntryFieldTypes.Text;
+    returnPolicyLinkLabel?: EntryFieldTypes.Symbol;
+    returnPolicyLinkUrl?: EntryFieldTypes.Symbol;
+    modelIncludesLabel?: EntryFieldTypes.Symbol;
+    additionalServicesLabel?: EntryFieldTypes.Symbol;
+    cardEndingInLabel?: EntryFieldTypes.Symbol;
+    taxesLabel?: EntryFieldTypes.Symbol;
+    additionalServicesEmptyLabel?: EntryFieldTypes.Symbol;
+    followShipmentLinkUrl?: EntryFieldTypes.Symbol;
+    trackingNumberLabel?: EntryFieldTypes.Symbol;
+}
+
+export type TypeMyOrderLabelsSkeleton = EntrySkeletonType<TypeMyOrderLabelsFields, "myOrderLabels">;
+export type TypeMyOrderLabels<Modifiers extends ChainModifiers, Locales extends LocaleCode = LocaleCode> = Entry<TypeMyOrderLabelsSkeleton, Modifiers, Locales>;

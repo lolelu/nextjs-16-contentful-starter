@@ -1,24 +1,23 @@
-import { EntriesQueries, EntryFieldTypes, EntrySkeletonType } from "contentful";
+// Re-export generated types for convenience
+export * from "./generated-types.ts";
 
-export enum CONTENT_TYPE_IDS {
-  ARTICLE = "article",
-}
+// Content type IDs enum for queries
+export const CONTENT_TYPE_IDS = {
+  GENERIC_PAGE: "genericPage",
+  STANDARD_LABELS: "standardLabels",
+} as const;
 
-export type ArticleQuery = EntriesQueries<
-  ArticleSkeleton,
-  "WITHOUT_UNRESOLVABLE_LINKS"
->;
-
-export interface ArticleSkeleton extends EntrySkeletonType {
-  contentTypeId: CONTENT_TYPE_IDS.ARTICLE;
-  fields: {
-    title: EntryFieldTypes.Text;
-    slug: EntryFieldTypes.Text;
-    summary: EntryFieldTypes.Text;
-    details: EntryFieldTypes.RichText;
-    date: EntryFieldTypes.Date;
-    authorName: EntryFieldTypes.Text;
-    categoryName: EntryFieldTypes.Text;
-    articleImage: EntryFieldTypes.AssetLink;
-  };
-}
+// Page type values for filtering GenericPage entries
+export type GenericPageType =
+  | "HomePage"
+  | "Other"
+  | "Landing"
+  | "ProductRegistration"
+  | "StoreFinder"
+  | "DemoPage"
+  | "CookiePage"
+  | "ExternalLanding"
+  | "SignUp"
+  | "ForgotPassword"
+  | "ResetPassword"
+  | "EmailVerification";

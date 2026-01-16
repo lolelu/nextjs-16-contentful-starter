@@ -6,15 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:types": "dotenv -- bash -c 'cf-content-types-generator --spaceId $CONTENTFUL_SPACE_ID --token $CONTENTFUL_MANAGEMENT_TOKEN --out ./lib/contentful/generated-types.ts --v10'"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.1.5",
     "contentful": "^11.9.0",
     "next": "16.1.1",
+    "next-intl": "^4.7.0",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "redis": "^5.10.0"
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@contentful/rich-text-types": "^17.2.5",
@@ -23,6 +24,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "babel-plugin-react-compiler": "^1.0.0",
+    "cf-content-types-generator": "^2.16.1",
     "eslint": "^9",
     "eslint-config-next": "latest",
     "tailwindcss": "^4.1.17",
