@@ -92,17 +92,69 @@ export const getGenericPageByType = async (
 };
 
 /**
- * Fetches the homepage (GenericPage with type "HomePage")
+ * Fetches a specific entry by ID
+ * @param entryId - The Contentful entry ID
  * @param options - Locale and preview options
- * @param query - Optional additional query parameters
- * @returns The homepage entry or null if not found
+ * @returns The entry or null if not found
  */
-export const getHomepage = async (
-  options?: QueryOptions,
-  query?: GenericPageQuery
+export const getEntryById = async (
+  entryId: string,
+  options?: QueryOptions
 ) => {
   "use cache";
-  return getGenericPageByType("HomePage", options, query);
+  const client = getContentfulClient(options?.preview);
+  const contentfulLocale = options?.locale
+    ? getContentfulLocale(options.locale)
+    : undefined;
+
+  try {
+    const entry = await client.withoutUnresolvableLinks.getEntry<TypeGenericPageSkeleton>(
+      entryId,
+      {
+        locale: contentfulLocale,
+      }
+    );
+
+    cacheTag(entry.sys.id);
+    return {
+      ...entry.fields,
+      id: entry.sys.id,
+    };
+  } catch (error) {
+    console.warn(`Entry with ID ${entryId} not found:`, error);
+    return null;
+  }
+};
+
+/**
+ * Fetches the homepage using the specific entry ID
+ * @param options - Locale and preview options
+ * @returns The homepage entry or null if not found
+ */
+export const getHomepage = async (options?: QueryOptions) => {
+  "use cache";
+  // Use the specific homepage entry ID instead of filtering by type
+  return getEntryById("4KKpYWUSWT4uwGluHhPshS", options);
+};
+
+/**
+ * Fetches the header material using the specific entry ID
+ * @param options - Locale and preview options
+ * @returns The header entry or null if not found
+ */
+export const getHeader = async (options?: QueryOptions) => {
+  "use cache";
+  return getEntryById("2pqMBm8156WE2Soujk22g3", options);
+};
+
+/**
+ * Fetches the footer material using the specific entry ID
+ * @param options - Locale and preview options
+ * @returns The footer entry or null if not found
+ */
+export const getFooter = async (options?: QueryOptions) => {
+  "use cache";
+  return getEntryById("4Sbymsi3J3B2koLBa23UZn", options);
 };
 
 // Type for label items in the labels array

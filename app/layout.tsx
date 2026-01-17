@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="[scrollbar-gutter:stable]">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
           <Header title="SHARED HOMEPAGE" />
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </div>
       </body>
     </html>

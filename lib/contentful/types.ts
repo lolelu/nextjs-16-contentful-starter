@@ -21,3 +21,23 @@ export type GenericPageType =
   | "ForgotPassword"
   | "ResetPassword"
   | "EmailVerification";
+
+// Shared types for Contentful modules
+export type ModuleData = {
+  sys: {
+    id: string;
+    contentType: {
+      sys: {
+        id: string;
+      };
+    };
+  };
+  fields: any;
+};
+
+export type ButtonInfo = {
+  type: 'primary' | 'secondary' | 'cta';
+  label?: string;
+  link?: string;
+  isPrimary?: boolean;
+};
