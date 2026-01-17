@@ -112,6 +112,42 @@ type LabelItem = {
   value?: string;
 };
 
+// Type for nested messages structure
+type NestedMessages = { [key: string]: string | NestedMessages };
+
+/**
+ * Converts flat keys with dots to nested structure
+ * e.g., { "one.two": "value" } -> { one: { two: "value" } }
+ */
+const convertToNestedMessages = (
+  flatMessages: Record<string, string>
+): NestedMessages => {
+  const result: NestedMessages = {};
+
+  for (const [key, value] of Object.entries(flatMessages)) {
+    if (key.includes(".")) {
+      // Split key by dots and create nested structure
+      const parts = key.split(".");
+      let current: NestedMessages = result;
+
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        if (!(part in current) || typeof current[part] === "string") {
+          current[part] = {};
+        }
+        current = current[part] as NestedMessages;
+      }
+
+      current[parts[parts.length - 1]] = value;
+    } else {
+      // No dots, just add directly
+      result[key] = value;
+    }
+  }
+
+  return result;
+};
+
 // Base fallback locale for labels
 const BASE_LABELS_LOCALE = "en";
 
@@ -230,15 +266,28 @@ export const getStandardLabels = async (
 };
 
 /**
- * Fetches translations for next-intl
- * Returns a messages object compatible with next-intl
+ * Fetches translations as flat key-value pairs
  * @param locale - URL locale
- * @returns Messages object for next-intl
+ * @returns Flat messages object
  */
 export const getTranslations = async (
   locale: UrlLocale
 ): Promise<Record<string, string>> => {
   "use cache";
+  return getStandardLabels({ locale });
+};
+
+/**
+ * Fetches translations for next-intl
+ * Returns a nested messages object compatible with next-intl
+ * Converts flat keys with dots (e.g., "one.two") to nested structure
+ * @param locale - URL locale
+ * @returns Nested messages object for next-intl
+ */
+export const getTranslationsForNextIntl = async (
+  locale: UrlLocale
+): Promise<NestedMessages> => {
+  "use cache";
   const labels = await getStandardLabels({ locale });
-  return labels;
+  return convertToNestedMessages(labels);
 };

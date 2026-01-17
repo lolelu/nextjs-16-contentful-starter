@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
-import { NextIntlClientProvider } from "next-intl";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +19,7 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <div className="min-h-screen">
           <Header title="SHARED HOMEPAGE" />
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+          {children}
         </div>
       </body>
     </html>

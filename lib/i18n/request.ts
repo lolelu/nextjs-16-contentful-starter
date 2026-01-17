@@ -1,6 +1,6 @@
 import { getRequestConfig } from "next-intl/server";
 import { routing } from "./routing";
-import { getTranslations } from "@/lib/contentful/queries";
+import { getTranslationsForNextIntl } from "@/lib/contentful/queries";
 import type { UrlLocale } from "./config";
 
 export default getRequestConfig(async ({ requestLocale }) => {
@@ -15,8 +15,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale;
   }
 
-  // Fetch translations from Contentful
-  const messages = await getTranslations(locale as UrlLocale);
+  // Fetch translations from Contentful (converted to nested structure)
+  const messages = await getTranslationsForNextIntl(locale as UrlLocale);
 
   return {
     locale,
